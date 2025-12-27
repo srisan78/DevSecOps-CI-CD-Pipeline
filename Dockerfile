@@ -19,11 +19,15 @@
 #WORKDIR /usr/src/myapp
 #RUN ./mvnw clean package
 #CMD ./mvnw cargo:run -P tomcat90
-FROM eclipse-temurin:21-jdk
+#FROM eclipse-temurin:21-jdk
 
-COPY . /usr/src/myapp
-WORKDIR /usr/src/myapp
+#COPY . /usr/src/myapp
+#WORKDIR /usr/src/myapp
 
-RUN chmod +x mvnw && ./mvnw clean package
-CMD ["./mvnw", "cargo:run", "-P", "tomcat90"]
+#RUN chmod +x mvnw && ./mvnw clean package
+#CMD ["./mvnw", "cargo:run", "-P", "tomcat90"]
 
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY target/*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
