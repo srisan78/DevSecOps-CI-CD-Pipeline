@@ -42,16 +42,22 @@
             }
         }
         
-        stage ('Building and pushing to docker hub'){
-            steps{
-                script{
-                    withDockerRegistry(credentialsId: 'dockerhub-pwd', toolName: 'docker') {
-                        sh "docker build -t sridhar76/petshop:${BUILD_TAG} ."
-                        sh "docker push sridhar76/petshop:${BUILD_TAG}"
-                   }
-                }
+        stage('Building and Pushing to Docker Hub') {
+    steps {
+        script {
+            withDockerRegistry(
+                credentialsId: 'dockerhub-pwd',
+                url: 'https://index.docker.io/v1/'
+            ) {
+                sh """
+                  docker build -t sridhar76/petshop:${BUILD_NUMBER} .
+                  docker push sridhar76/petshop:${BUILD_NUMBER}
+                """
             }
         }
+    }
+}
+
         stage("Image Scanning using TRIVY"){
             steps{
                 sh "trivy image sridhar76/petshop:${BUILD_TAG} > trivy.txt"
