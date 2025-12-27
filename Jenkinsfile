@@ -41,7 +41,10 @@
                 }
             }
         }
-        
+        stage  ('Building Docker Image'){
+            steps {
+                sh 'docker build -t sridhar76/petshop:$BUILD_NUMBER .'
+            }
         stage('Building and Pushing to Docker Hub') {
     steps {
         script {
@@ -49,8 +52,7 @@
                 credentialsId: 'dockerhub-pwd',
                 url: 'https://index.docker.io/v1/'
             ) {
-                sh """
-                  docker build -t sridhar76/petshop:${BUILD_NUMBER} .
+                sh ""
                   docker push sridhar76/petshop:${BUILD_NUMBER}
                 """
             }
