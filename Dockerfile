@@ -14,12 +14,12 @@
 #    limitations under the License.
 #
 
-#FROM openjdk:21
-#COPY . /usr/src/myapp
-#WORKDIR /usr/src/myapp
-#RUN ./mvnw clean package
-#CMD ./mvnw cargo:run -P tomcat90
-#FROM eclipse-temurin:21-jdk
+FROM openjdk:21
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+RUN ./mvnw clean package
+CMD ./mvnw cargo:run -P tomcat90
+FROM eclipse-temurin:21-jdk
 
 #COPY . /usr/src/myapp
 #WORKDIR /usr/src/myapp
@@ -27,15 +27,5 @@
 #RUN chmod +x mvnw && ./mvnw clean package
 #CMD ["./mvnw", "cargo:run", "-P", "tomcat90"]
 
-# Build stage
-FROM eclipse-temurin:21-jdk-jammy AS build
-WORKDIR /build
-COPY . .
-RUN mvn clean package -DskipTests
 
-# Runtime stage
-FROM eclipse-temurin:21-jre-jammy
-WORKDIR /app
-COPY --from=build /build/target/*.jar app.jar
-ENTRYPOINT ["java","-jar","app.jar"]
 
