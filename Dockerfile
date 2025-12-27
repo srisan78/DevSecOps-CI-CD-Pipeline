@@ -27,7 +27,15 @@
 #RUN chmod +x mvnw && ./mvnw clean package
 #CMD ["./mvnw", "cargo:run", "-P", "tomcat90"]
 
+# Build stage
+FROM eclipse-temurin:21-jdk-jammy AS build
+WORKDIR /build
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Runtime stage
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
-COPY target/*.jar app.jar
+COPY --from=build /build/target/*.jar app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
+
