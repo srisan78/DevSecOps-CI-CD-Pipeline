@@ -27,7 +27,7 @@
 #RUN chmod +x mvnw && ./mvnw clean package
 #CMD ["./mvnw", "cargo:run", "-P", "tomcat90"]
 
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 COPY target/*.jar app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
